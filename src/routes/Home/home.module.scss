@@ -5,21 +5,9 @@
 .container {
   padding: 0 2%;
 
-  @include responsive.after(MD) {
-    padding: 0 3%;
-  }
-
-  @include responsive.after(LD) {
-    padding: 0 7%;
-  }
-
   form {
     @include flexbox.flexbox(center, center);
     margin-top: 25px;
-
-    @include responsive.after(SD) {
-      margin-top: 30px;
-    }
 
     .searchInput {
       width: 50%;
@@ -53,5 +41,19 @@
         margin-top: 4px;
       }
     }
+  }
+
+  @include responsive.after(SD) {
+    form {
+      margin-top: 30px;
+    }
+  }
+
+  @include responsive.after(MD) {
+    padding: 0 3%;
+  }
+
+  @include responsive.after(LD) {
+    padding: 0 7%;
   }
 }

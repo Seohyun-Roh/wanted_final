@@ -1,4 +1,8 @@
+import { useState, useMount } from 'hooks'
+import store from 'store'
+
 import { IPlace } from 'types/place'
+
 import { Building, Museum } from 'assets/svgs'
 import Cafe from 'assets/images/cafe.png'
 import Hotel from 'assets/images/hotel.jpg'
@@ -11,6 +15,10 @@ interface IProps {
 }
 
 const PlaceCard = ({ place }: IProps) => {
+  const [isIncluded, setIsIncluded] = useState(false)
+
+  useMount(() => setIsIncluded(checkIsIncluded()))
+
   const PlaceIcon = {
     음식점: <img src={Restaurant} alt='음식점' className={styles.placeIcon} />,
     관광명소: <img src={Travel} alt='관광명소' className={styles.placeIcon} />,
@@ -18,6 +26,34 @@ const PlaceCard = ({ place }: IProps) => {
     숙박: <img src={Hotel} alt='숙박' className={styles.placeIcon} />,
     문화시설: <Museum className={styles.placeIcon} />,
   }[place.categoryGroupName] ?? <Building className={styles.placeIcon} />
+
+  const checkIsIncluded = () => {
+    const favoritesList = store.get('favorites') ?? []
+    let included
+
+    if (!favoritesList || favoritesList === []) {
+      included = false
+    } else {
+      included = favoritesList.some((favorite: { content: string }) => favorite.content === place.content)
+    }
+
+    return included
+  }
+
+  const handleFavoriteClick = () => {
+    const favorites = store.get('favorites') ?? []
+    let newFavorites
+
+    if (isIncluded) {
+      newFavorites = favorites.filter((favorite: { content: string }) => favorite.content === place.content)
+      setIsIncluded(false)
+    } else {
+      newFavorites = [...favorites, place]
+      setIsIncluded(true)
+    }
+
+    store.set('favorites', newFavorites)
+  }
 
   const handleButtonClick = () => {
     window.open(`${place.placeUrl}`, '_blank')
@@ -33,9 +69,14 @@ const PlaceCard = ({ place }: IProps) => {
           <p className={styles.roadAddressName}>{place.roadAddressName}</p>
         </div>
       </div>
-      <button type='button' className={styles.linkBtn} onClick={handleButtonClick}>
-        정보 보기
-      </button>
+      <div className={styles.buttonWrapper}>
+        <button type='button' className={styles.likeBtn} onClick={handleFavoriteClick}>
+          {isIncluded ? '❤️' : '🤍'}
+        </button>
+        <button type='button' className={styles.infoBtn} onClick={handleButtonClick}>
+          정보 보기
+        </button>
+      </div>
     </li>
   )
 }
