@@ -19,4 +19,5 @@ export interface IMarker {
     lng: number
   }
   content: string
+  id: string
 }
