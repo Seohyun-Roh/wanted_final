@@ -1,7 +1,9 @@
 import { useState, useMount } from 'hooks'
+import { useRecoil } from 'hooks/state'
 import store from 'store'
 
 import { IPlace } from 'types/place'
+import { favoriteListState } from 'states/place'
 
 import { Building, Museum } from 'assets/svgs'
 import Cafe from 'assets/images/cafe.png'
@@ -15,6 +17,7 @@ interface IProps {
 }
 
 const PlaceCard = ({ place }: IProps) => {
+  const [, setFavoriteList] = useRecoil(favoriteListState)
   const [isIncluded, setIsIncluded] = useState(false)
 
   useMount(() => setIsIncluded(checkIsIncluded()))
@@ -53,6 +56,7 @@ const PlaceCard = ({ place }: IProps) => {
     }
 
     store.set('favorites', newFavorites)
+    setFavoriteList(newFavorites)
   }
 
   const handleButtonClick = () => {

@@ -1,8 +1,9 @@
 import { Routes, Route } from 'react-router-dom'
 
 import styles from './routes.module.scss'
-import HomePage from './Home'
+import Home from './Home'
 import GNB from './_shared/GNB'
+import Favorite from './Favorite'
 
 const App = () => {
   return (
@@ -10,8 +11,8 @@ const App = () => {
       <main className={styles.app}>
         <GNB />
         <Routes>
-          <Route path='/' element={<HomePage />} />
-          <Route path='/myFavList' element={<div>HH</div>} />
+          <Route path='/' element={<Home />} />
+          <Route path='/myFavList' element={<Favorite />} />
           <Route path='*' element={<div>Not found</div>} />
         </Routes>
       </main>
