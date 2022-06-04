@@ -1,0 +1,57 @@
+@use '/src/styles/constants/colors';
+@use '/src/styles/mixins/flexbox';
+@use '/src/styles/mixins/responsive';
+
+.container {
+  padding: 0 2%;
+
+  @include responsive.after(MD) {
+    padding: 0 3%;
+  }
+
+  @include responsive.after(LD) {
+    padding: 0 7%;
+  }
+
+  form {
+    @include flexbox.flexbox(center, center);
+    margin-top: 25px;
+
+    @include responsive.after(SD) {
+      margin-top: 30px;
+    }
+
+    .searchInput {
+      width: 50%;
+      max-width: 300px;
+      height: 50px;
+      padding: 0 18px;
+      font-size: 18px;
+      border: 1px solid colors.$BORDER_COLOR;
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+
+    .searchBtn {
+      width: 15%;
+      max-width: 70px;
+      height: 50px;
+      margin-left: 2px;
+      background-color: colors.$MAIN_COLOR;
+      border: 1px solid colors.$BORDER_COLOR;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+      transition: 200ms;
+
+      &:hover {
+        background-color: colors.$MAIN_HOVER_COLOR;
+      }
+
+      svg {
+        width: 19px;
+        height: 19px;
+        margin-top: 4px;
+      }
+    }
+  }
+}

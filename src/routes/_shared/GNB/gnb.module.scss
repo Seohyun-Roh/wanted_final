@@ -21,10 +21,11 @@
 
   a {
     padding: 4px 14px;
-    color: colors.$GRAY2;
+    color: colors.$SUB_TEXT_COLOR;
 
     &.isActive {
       font-weight: 600;
+      color: colors.$MAIN_TEXT_COLOR;
     }
   }
 }

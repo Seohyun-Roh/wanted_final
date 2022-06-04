@@ -4,7 +4,9 @@ import { useRecoilState } from 'hooks/state'
 import { placeListState } from 'states/place'
 
 import KakaoMap from './KakaoMap'
+import { SearchIcon } from 'assets/svgs'
 import styles from './home.module.scss'
+import PlaceCard from 'routes/_shared/PlaceCard'
 import { useUnmount } from 'react-use'
 
 const Home = () => {
@@ -37,9 +39,15 @@ const Home = () => {
           onChange={handleInputChange}
         />
         <button type='submit' className={styles.searchBtn}>
-          검색
+          <SearchIcon />
         </button>
       </form>
+      <ul>
+        {places?.map((place, i) => {
+          const key = `searchResults-${i}`
+          return <PlaceCard key={key} place={place} />
+        })}
+      </ul>
     </div>
   )
 }
