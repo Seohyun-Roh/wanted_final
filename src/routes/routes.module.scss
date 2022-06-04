@@ -4,14 +4,13 @@
 
 .container {
   @include flexbox.flexbox(center, center);
+  width: 100vw;
   min-height: 100vh;
   background-color: colors.$BG_COLOR;
 
   .app {
-    width: 80vw;
+    width: 100%;
     min-height: 100vh;
     padding: 20px 10px;
-    background-color: colors.$APP_BG;
-    box-shadow: 0 1px 4px colors.$APP_BOX_SHADOW;
   }
 }
