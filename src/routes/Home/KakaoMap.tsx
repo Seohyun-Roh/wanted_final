@@ -1,17 +1,20 @@
-import { ArrowIcon } from 'assets/svgs'
 import { useEffect, useState } from 'react'
 import { Map, MapMarker } from 'react-kakao-maps-sdk'
-import { useMount } from 'react-use'
 
-import { IMarker } from 'types/address'
+import { useRecoilState } from 'hooks/state'
+import { placeListState } from 'states/place'
+
+import { IPlace } from 'types/place'
+import { ArrowIcon } from 'assets/svgs'
 
 interface Iprops {
   searchWord: string
 }
 
 const KakaoMap = ({ searchWord }: Iprops) => {
-  const [info, setInfo] = useState<IMarker>()
-  const [markers, setMarkers] = useState<IMarker[]>()
+  const [markers, setMarkers] = useRecoilState(placeListState)
+
+  const [info, setInfo] = useState<IPlace>()
   const [map, setMap] = useState<kakao.maps.Map>()
 
   useEffect(() => {
@@ -22,7 +25,7 @@ const KakaoMap = ({ searchWord }: Iprops) => {
     ps.keywordSearch(searchWord, (data, status, _pagination) => {
       if (status === kakao.maps.services.Status.OK) {
         const bounds = new kakao.maps.LatLngBounds()
-        const tmpMarkers: IMarker[] = []
+        const tmpMarkers: IPlace[] = []
 
         data.forEach((d) => {
           tmpMarkers.push({
@@ -31,7 +34,10 @@ const KakaoMap = ({ searchWord }: Iprops) => {
               lng: Number(d.x),
             },
             content: d.place_name,
-            id: d.id,
+            placeUrl: d.place_url,
+            roadAddressName: d.road_address_name,
+            categoryName: d.category_name,
+            categoryGroupName: d.category_group_name,
           })
 
           bounds.extend(new kakao.maps.LatLng(Number(d.y), Number(d.x)))
@@ -41,7 +47,7 @@ const KakaoMap = ({ searchWord }: Iprops) => {
         map.setBounds(bounds)
       }
     })
-  }, [map, searchWord])
+  }, [map, searchWord, setMarkers])
 
   useEffect(() => {
     const options = {
@@ -89,9 +95,9 @@ const KakaoMap = ({ searchWord }: Iprops) => {
             onClick={() => setInfo(marker)}
           >
             {info && info.content === marker.content && (
-              <div style={{ color: '#000' }}>
+              <div>
                 {marker.content}
-                <a href={`https://place.map.kakao.com/${marker.id}`} target='_blank' rel='noreferrer'>
+                <a href={marker.placeUrl} target='_blank' rel='noreferrer'>
                   <ArrowIcon width='15px' height='15px' />
                 </a>
               </div>

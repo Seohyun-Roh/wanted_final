@@ -1,4 +1,4 @@
-export interface IAddress {
+/* export interface IAddress {
   address_name: string
   category_group_code: string
   category_group_name: string
@@ -11,13 +11,16 @@ export interface IAddress {
   road_address_name: string
   x: string
   y: string
-}
+} */
 
-export interface IMarker {
+export interface IPlace {
   position: {
     lat: number
     lng: number
   }
   content: string
-  id: string
+  placeUrl: string
+  roadAddressName: string
+  categoryName: string
+  categoryGroupName: string
 }
