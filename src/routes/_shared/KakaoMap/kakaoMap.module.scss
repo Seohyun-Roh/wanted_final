@@ -1,4 +1,8 @@
 .infoWindow {
-  width: 30px;
-  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 150px;
+  height: 20px;
+  padding: 10px;
 }
