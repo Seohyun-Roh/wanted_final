@@ -1,13 +1,13 @@
 import { useState, FormEvent } from 'react'
+import { useUnmount } from 'react-use'
 
 import { useRecoilState } from 'hooks/state'
 import { placeListState } from 'states/place'
 
-import KakaoMap from './KakaoMap'
+import KakaoMap from '../_shared/KakaoMap/KakaoMap'
+import PlaceCard from '../_shared/PlaceCard'
 import { SearchIcon } from 'assets/svgs'
 import styles from './home.module.scss'
-import PlaceCard from 'routes/_shared/PlaceCard'
-import { useUnmount } from 'react-use'
 
 const Home = () => {
   const [places, setPlaces] = useRecoilState(placeListState)
@@ -28,7 +28,7 @@ const Home = () => {
   useUnmount(() => setPlaces([]))
 
   return (
-    <div className={styles.container}>
+    <main className={styles.container}>
       <KakaoMap searchWord={searchWord} />
       <form onSubmit={handleFormSubmit}>
         <input
@@ -48,7 +48,7 @@ const Home = () => {
           return <PlaceCard key={key} place={place} />
         })}
       </ul>
-    </div>
+    </main>
   )
 }
 

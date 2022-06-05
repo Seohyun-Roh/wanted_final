@@ -3,7 +3,7 @@ import { useRecoil } from 'hooks/state'
 import store from 'store'
 
 import { IPlace } from 'types/place'
-import { favoriteListState } from 'states/place'
+import { favoriteListState, selectState } from 'states/place'
 
 import { Building, Museum } from 'assets/svgs'
 import Cafe from 'assets/images/cafe.png'
@@ -18,6 +18,7 @@ interface IProps {
 
 const PlaceCard = ({ place }: IProps) => {
   const [, setFavoriteList] = useRecoil(favoriteListState)
+  const [, setSelect] = useRecoil(selectState)
   const [isIncluded, setIsIncluded] = useState(false)
 
   useMount(() => setIsIncluded(checkIsIncluded()))
@@ -43,12 +44,23 @@ const PlaceCard = ({ place }: IProps) => {
     return included
   }
 
+  const handleItemClick = () => {
+    const center = {
+      center: {
+        lat: place.position.lat,
+        lng: place.position.lng,
+      },
+    }
+
+    setSelect(center)
+  }
+
   const handleFavoriteClick = () => {
     const favorites = store.get('favorites') ?? []
     let newFavorites
 
     if (isIncluded) {
-      newFavorites = favorites.filter((favorite: { content: string }) => favorite.content === place.content)
+      newFavorites = favorites.filter((favorite: { content: string }) => favorite.content !== place.content)
       setIsIncluded(false)
     } else {
       newFavorites = [...favorites, place]
@@ -79,6 +91,9 @@ const PlaceCard = ({ place }: IProps) => {
         </button>
         <button type='button' className={styles.infoBtn} onClick={handleButtonClick}>
           정보 보기
+        </button>
+        <button type='button' className={styles.infoBtn} onClick={handleItemClick}>
+          위치 보기
         </button>
       </div>
     </li>

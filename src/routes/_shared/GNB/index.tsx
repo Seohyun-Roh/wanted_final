@@ -1,5 +1,6 @@
 import cx from 'classnames'
 import { NavLink } from 'react-router-dom'
+
 import styles from './gnb.module.scss'
 
 const GNB = () => {
