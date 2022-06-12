@@ -3,8 +3,8 @@ import { Map, MapMarker } from 'react-kakao-maps-sdk'
 
 import { useRecoilState } from 'hooks/state'
 import { placeListState, selectState } from 'states/place'
-
 import { IPlace } from 'types/place'
+
 import { ArrowIcon } from 'assets/svgs'
 import styles from './kakaoMap.module.scss'
 
@@ -59,20 +59,22 @@ const KakaoMap = ({ searchWord }: Iprops) => {
         const bounds = new kakao.maps.LatLngBounds()
         const tmpMarkers: IPlace[] = []
 
-        data.forEach((d) => {
+        data.forEach((datum) => {
           tmpMarkers.push({
+            id: datum.id,
             position: {
-              lat: Number(d.y),
-              lng: Number(d.x),
+              lat: Number(datum.y),
+              lng: Number(datum.x),
             },
-            content: d.place_name,
-            placeUrl: d.place_url,
-            roadAddressName: d.road_address_name,
-            categoryName: d.category_name,
-            categoryGroupName: d.category_group_name,
+            content: datum.place_name,
+            placeUrl: datum.place_url,
+            roadAddressName: datum.road_address_name,
+            categoryName: datum.category_name,
+            categoryGroupName: datum.category_group_name,
+            isLiked: false,
           })
 
-          bounds.extend(new kakao.maps.LatLng(Number(d.y), Number(d.x)))
+          bounds.extend(new kakao.maps.LatLng(Number(datum.y), Number(datum.x)))
         })
 
         setMarkers(tmpMarkers)
@@ -93,21 +95,18 @@ const KakaoMap = ({ searchWord }: Iprops) => {
         level={5}
         onCreate={setMap}
       >
-        {markers?.map((marker) => {
-          const key = `marker-${marker.content}-${marker.position.lat},${marker.position.lng}`
-          return (
-            <MapMarker key={key} position={marker.position} onClick={() => setInfo(marker)}>
-              {info && info.content === marker.content && (
-                <div className={styles.infoWindow}>
-                  {marker.content}
-                  <a href={marker.placeUrl} target='_blank' rel='noreferrer'>
-                    <ArrowIcon width='15px' height='15px' />
-                  </a>
-                </div>
-              )}
-            </MapMarker>
-          )
-        })}
+        {markers?.map((marker) => (
+          <MapMarker key={marker.id} position={marker.position} onClick={() => setInfo(marker)}>
+            {info && info.content === marker.content && (
+              <div className={styles.infoWindow}>
+                {marker.content}
+                <a href={marker.placeUrl} target='_blank' rel='noreferrer'>
+                  <ArrowIcon width='15px' height='15px' />
+                </a>
+              </div>
+            )}
+          </MapMarker>
+        ))}
       </Map>
     </section>
   )

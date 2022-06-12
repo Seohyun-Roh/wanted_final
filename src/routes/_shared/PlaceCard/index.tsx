@@ -1,9 +1,8 @@
-import { useState } from 'hooks'
-import { useRecoil } from 'hooks/state'
+import { useRecoilState } from 'hooks/state'
 import store from 'store'
 
 import { IPlace } from 'types/place'
-import { favoriteListState, selectState } from 'states/place'
+import { placeListState, favoriteListState, selectState } from 'states/place'
 
 import { Building, Museum } from 'assets/svgs'
 import { Cafe, Hotel, Restaurant, Travel } from 'assets/images'
@@ -11,12 +10,44 @@ import styles from './placeCard.module.scss'
 
 interface IProps {
   place: IPlace
+  isFavorite: boolean
 }
 
-const PlaceCard = ({ place }: IProps) => {
-  const [, setFavoriteList] = useRecoil(favoriteListState)
-  const [, setSelect] = useRecoil(selectState)
-  const [isIncluded, setIsIncluded] = useState(false)
+const PlaceCard = ({ place, isFavorite }: IProps) => {
+  const [placeList, setPlaceList] = useRecoilState(placeListState)
+  const [, setFavoriteList] = useRecoilState(favoriteListState)
+  const [, setSelect] = useRecoilState(selectState)
+
+  const handleFavoriteClick = (id: string) => () => {
+    const savedFavoriteList = store.get('favorites') ?? []
+    const filteredFavoriteList = savedFavoriteList.filter((p: IPlace) => p.id !== id)
+    let newFavoriteList = filteredFavoriteList
+
+    if (isFavorite) {
+      setFavoriteList(newFavoriteList)
+    } else {
+      const newPlace = { ...place, isLiked: !place.isLiked }
+
+      if (newPlace.isLiked) {
+        newFavoriteList = filteredFavoriteList.concat(newPlace)
+      } else {
+        newFavoriteList = filteredFavoriteList
+      }
+
+      const newPlaceList = placeList.map((p) => {
+        if (p.id === id) return { ...p, isLiked: !place.isLiked }
+        return p
+      })
+
+      setPlaceList(newPlaceList)
+    }
+
+    store.set('favorites', newFavoriteList)
+  }
+
+  const handleInfoClick = () => {
+    window.open(`${place.placeUrl}`, '_blank')
+  }
 
   const handleItemClick = () => {
     const center = {
@@ -25,31 +56,8 @@ const PlaceCard = ({ place }: IProps) => {
         lng: place.position.lng,
       },
     }
-
     setSelect(center)
   }
-
-  const handleFavoriteClick = () => {
-    const favorites = store.get('favorites') ?? []
-    let newFavorites
-
-    if (isIncluded) {
-      newFavorites = favorites.filter((favorite: { content: string }) => favorite.content !== place.content)
-      setIsIncluded(false)
-    } else {
-      newFavorites = [...favorites, place]
-      setIsIncluded(true)
-    }
-
-    store.set('favorites', newFavorites)
-    setFavoriteList(newFavorites)
-  }
-
-  const handleButtonClick = () => {
-    window.open(`${place.placeUrl}`, '_blank')
-  }
-
-  console.log(place.categoryGroupName)
 
   return (
     <li className={styles.wrapper}>
@@ -70,10 +78,10 @@ const PlaceCard = ({ place }: IProps) => {
         </div>
       </div>
       <div className={styles.buttonWrapper}>
-        <button type='button' className={styles.likeBtn} onClick={handleFavoriteClick}>
-          {isIncluded ? '❤️' : '🤍'}
+        <button type='button' className={styles.likeBtn} onClick={handleFavoriteClick(place.id)}>
+          {place.isLiked ? '❤️' : '🤍'}
         </button>
-        <button type='button' className={styles.infoBtn} onClick={handleButtonClick}>
+        <button type='button' className={styles.infoBtn} onClick={handleInfoClick}>
           정보 보기
         </button>
         <button type='button' className={styles.infoBtn} onClick={handleItemClick}>

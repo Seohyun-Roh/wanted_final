@@ -4,7 +4,7 @@ import { useUnmount } from 'react-use'
 import { useRecoilState } from 'hooks/state'
 import { placeListState } from 'states/place'
 
-import KakaoMap from '../_shared/KakaoMap/KakaoMap'
+import KakaoMap from '../_shared/KakaoMap'
 import PlaceCard from '../_shared/PlaceCard'
 import { SearchIcon } from 'assets/svgs'
 import styles from './home.module.scss'
@@ -43,10 +43,9 @@ const Home = () => {
         </button>
       </form>
       <ul>
-        {places?.map((place, i) => {
-          const key = `searchResults-${i}`
-          return <PlaceCard key={key} place={place} />
-        })}
+        {places?.map((place) => (
+          <PlaceCard key={place.id} isFavorite={false} place={place} />
+        ))}
       </ul>
     </main>
   )

@@ -5,7 +5,7 @@ import store from 'store'
 
 import { favoriteListState, placeListState } from 'states/place'
 import PlaceCard from 'routes/_shared/PlaceCard'
-import KakaoMap from 'routes/_shared/KakaoMap/KakaoMap'
+import KakaoMap from 'routes/_shared/KakaoMap'
 import styles from './favorite.module.scss'
 
 const Favorite = () => {
@@ -22,10 +22,9 @@ const Favorite = () => {
     <div className={styles.container}>
       <KakaoMap />
       <ul>
-        {favoriteList?.map((favorite, i) => {
-          const key = `favorites-${i}`
-          return <PlaceCard key={key} place={favorite} />
-        })}
+        {favoriteList?.map((favorite) => (
+          <PlaceCard key={favorite.id} isFavorite place={favorite} />
+        ))}
       </ul>
       {favoriteList.length === 0 && (
         <div className={styles.noFavList}>

@@ -1,4 +1,5 @@
 export interface IPlace {
+  id: string
   position: {
     lat: number
     lng: number
@@ -8,6 +9,7 @@ export interface IPlace {
   roadAddressName: string
   categoryName: string
   categoryGroupName: string
+  isLiked: boolean
 }
 
 export interface ISelect {
