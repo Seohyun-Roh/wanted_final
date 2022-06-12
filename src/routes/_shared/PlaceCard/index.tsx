@@ -26,6 +26,12 @@ const PlaceCard = ({ place, isFavorite }: IProps) => {
     if (isFavorite) {
       setFavoriteList(newFavoriteList)
     } else {
+      const newPlaceList = placeList.map((p) => {
+        if (p.id === id) return { ...p, isLiked: !place.isLiked }
+        return p
+      })
+      setPlaceList(newPlaceList)
+
       const newPlace = { ...place, isLiked: !place.isLiked }
 
       if (newPlace.isLiked) {
@@ -33,13 +39,6 @@ const PlaceCard = ({ place, isFavorite }: IProps) => {
       } else {
         newFavoriteList = filteredFavoriteList
       }
-
-      const newPlaceList = placeList.map((p) => {
-        if (p.id === id) return { ...p, isLiked: !place.isLiked }
-        return p
-      })
-
-      setPlaceList(newPlaceList)
     }
 
     store.set('favorites', newFavoriteList)
@@ -62,15 +61,13 @@ const PlaceCard = ({ place, isFavorite }: IProps) => {
   return (
     <li className={styles.wrapper}>
       <div className={styles.placeInfo}>
-        {(place.categoryGroupName === '음식점' && <img src={Restaurant} alt='음식점' className={styles.placeIcon} />) ||
-          (place.categoryGroupName === '관광명소' && (
-            <img src={Travel} alt='관광명소' className={styles.placeIcon} />
-          )) ||
-          (place.categoryGroupName === '카페' && <img src={Cafe} alt='카페' className={styles.placeIcon} />) ||
-          (place.categoryGroupName === '숙박' && <img src={Hotel} alt='숙박' className={styles.placeIcon} />) ||
-          (place.categoryGroupName === '문화시설' && <Museum className={styles.placeIcon} />) || (
-            <Building className={styles.placeIcon} />
-          )}
+        <div className={styles.placeIcon}>
+          {(place.categoryGroupName === '음식점' && <img src={Restaurant} alt='음식점' />) ||
+            (place.categoryGroupName === '관광명소' && <img src={Travel} alt='관광명소' />) ||
+            (place.categoryGroupName === '카페' && <img src={Cafe} alt='카페' />) ||
+            (place.categoryGroupName === '숙박' && <img src={Hotel} alt='숙박' />) ||
+            (place.categoryGroupName === '문화시설' && <Museum />) || <Building />}
+        </div>
         <div>
           <p className={styles.content}>{place.content}</p>
           <p className={styles.categoryName}>{place.categoryName}</p>

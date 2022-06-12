@@ -5,10 +5,13 @@
 .container {
   padding: 0 2%;
 
+  .contents {
+    margin-top: 25px;
+  }
+
   .noFavList {
     @include flexbox.flexbox(center, center);
     flex-direction: column;
-    margin-top: 25px;
     font-size: 18px;
     line-height: 24px;
 

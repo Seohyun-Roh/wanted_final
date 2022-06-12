@@ -1,15 +1,15 @@
 import { Routes, Route } from 'react-router-dom'
 
-import styles from './routes.module.scss'
 import Home from './Home'
 import GNB from './_shared/GNB'
 import Favorite from './Favorite'
+import styles from './routes.module.scss'
 
 const App = () => {
   return (
     <div className={styles.container}>
+      <GNB />
       <main className={styles.app}>
-        <GNB />
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/myFavList' element={<Favorite />} />

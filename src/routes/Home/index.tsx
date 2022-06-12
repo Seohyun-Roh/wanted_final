@@ -28,7 +28,7 @@ const Home = () => {
   useUnmount(() => setPlaces([]))
 
   return (
-    <main className={styles.container}>
+    <section className={styles.container}>
       <KakaoMap searchWord={searchWord} />
       <form onSubmit={handleFormSubmit}>
         <input
@@ -47,7 +47,7 @@ const Home = () => {
           <PlaceCard key={place.id} isFavorite={false} place={place} />
         ))}
       </ul>
-    </main>
+    </section>
   )
 }
 
