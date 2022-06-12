@@ -57,7 +57,7 @@ const Favorite = () => {
     }
 
     setFilteredPlace(newPlaces)
-  }, [currentCategory])
+  }, [currentCategory, favoriteList])
 
   return (
     <section className={styles.container}>
