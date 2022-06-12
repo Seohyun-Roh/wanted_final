@@ -6,10 +6,7 @@ import { IPlace } from 'types/place'
 import { favoriteListState, selectState } from 'states/place'
 
 import { Building, Museum } from 'assets/svgs'
-import Cafe from 'assets/images/cafe.png'
-import Hotel from 'assets/images/hotel.jpg'
-import Restaurant from 'assets/images/restaurant.png'
-import Travel from 'assets/images/travel.png'
+import { Cafe, Hotel, Restaurant, Travel } from 'assets/images'
 import styles from './placeCard.module.scss'
 
 interface IProps {
@@ -20,21 +17,6 @@ const PlaceCard = ({ place }: IProps) => {
   const [, setFavoriteList] = useRecoil(favoriteListState)
   const [, setSelect] = useRecoil(selectState)
   const [isIncluded, setIsIncluded] = useState(false)
-
-  const PlaceIcon = () => {
-    switch (place.categoryGroupName) {
-      case '음식점':
-        return <img src={Restaurant} alt='음식점' className={styles.placeIcon} />
-      case '관광명소':
-        return <img src={Travel} alt='관광명소' className={styles.placeIcon} />
-      case '카페':
-        return <img src={Cafe} alt='카페' className={styles.placeIcon} />
-      case '문화시설':
-        return <Museum className={styles.placeIcon} />
-      default:
-        return <Building className={styles.placeIcon} />
-    }
-  }
 
   const handleItemClick = () => {
     const center = {
@@ -67,10 +49,20 @@ const PlaceCard = ({ place }: IProps) => {
     window.open(`${place.placeUrl}`, '_blank')
   }
 
+  console.log(place.categoryGroupName)
+
   return (
     <li className={styles.wrapper}>
       <div className={styles.placeInfo}>
-        {PlaceIcon()}
+        {(place.categoryGroupName === '음식점' && <img src={Restaurant} alt='음식점' className={styles.placeIcon} />) ||
+          (place.categoryGroupName === '관광명소' && (
+            <img src={Travel} alt='관광명소' className={styles.placeIcon} />
+          )) ||
+          (place.categoryGroupName === '카페' && <img src={Cafe} alt='카페' className={styles.placeIcon} />) ||
+          (place.categoryGroupName === '숙박' && <img src={Hotel} alt='숙박' className={styles.placeIcon} />) ||
+          (place.categoryGroupName === '문화시설' && <Museum className={styles.placeIcon} />) || (
+            <Building className={styles.placeIcon} />
+          )}
         <div>
           <p className={styles.content}>{place.content}</p>
           <p className={styles.categoryName}>{place.categoryName}</p>
