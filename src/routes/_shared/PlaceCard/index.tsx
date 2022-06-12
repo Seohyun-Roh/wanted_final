@@ -1,4 +1,4 @@
-import { useState, useMount } from 'hooks'
+import { useState } from 'hooks'
 import { useRecoil } from 'hooks/state'
 import store from 'store'
 
@@ -21,27 +21,19 @@ const PlaceCard = ({ place }: IProps) => {
   const [, setSelect] = useRecoil(selectState)
   const [isIncluded, setIsIncluded] = useState(false)
 
-  useMount(() => setIsIncluded(checkIsIncluded()))
-
-  const PlaceIcon = {
-    음식점: <img src={Restaurant} alt='음식점' className={styles.placeIcon} />,
-    관광명소: <img src={Travel} alt='관광명소' className={styles.placeIcon} />,
-    카페: <img src={Cafe} alt='카페' className={styles.placeIcon} />,
-    숙박: <img src={Hotel} alt='숙박' className={styles.placeIcon} />,
-    문화시설: <Museum className={styles.placeIcon} />,
-  }[place.categoryGroupName] ?? <Building className={styles.placeIcon} />
-
-  const checkIsIncluded = () => {
-    const favoritesList = store.get('favorites') ?? []
-    let included
-
-    if (!favoritesList || favoritesList === []) {
-      included = false
-    } else {
-      included = favoritesList.some((favorite: { content: string }) => favorite.content === place.content)
+  const PlaceIcon = () => {
+    switch (place.categoryGroupName) {
+      case '음식점':
+        return <img src={Restaurant} alt='음식점' className={styles.placeIcon} />
+      case '관광명소':
+        return <img src={Travel} alt='관광명소' className={styles.placeIcon} />
+      case '카페':
+        return <img src={Cafe} alt='카페' className={styles.placeIcon} />
+      case '문화시설':
+        return <Museum className={styles.placeIcon} />
+      default:
+        return <Building className={styles.placeIcon} />
     }
-
-    return included
   }
 
   const handleItemClick = () => {
@@ -78,7 +70,7 @@ const PlaceCard = ({ place }: IProps) => {
   return (
     <li className={styles.wrapper}>
       <div className={styles.placeInfo}>
-        {PlaceIcon}
+        {PlaceIcon()}
         <div>
           <p className={styles.content}>{place.content}</p>
           <p className={styles.categoryName}>{place.categoryName}</p>
