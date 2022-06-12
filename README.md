@@ -9,7 +9,7 @@
 1. 키워드로 지도를 검색한 후 즐겨찾기 등록
 2. 등록해놓은 장소 모아보기
 
-### [배포 페이지 🎊](https://629c10bb5413216abb8f7a6a--musical-torrone-6aaed9.netlify.app/)
+### [배포 페이지 🎊](https://master--musical-torrone-6aaed9.netlify.app/)
 
 ## 개발 환경
 
